@@ -1,10 +1,10 @@
 /**
- * 检查并更新APP
+ * App update
  * version.js
  * [{'verCode':2,'verName':'1.2.1','apkPath':'http://****.com/your.apk'}]
- * verCode 版本号
- * verName 版本名称
- * apkPath APK下载路径
+ * verCode Versienummer
+ * verName Versienaam
+ * apkPath APK download url
  * @author 
  */
 var update = {

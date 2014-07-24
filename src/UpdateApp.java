@@ -1,4 +1,4 @@
-package com.zybx.xiaofu;
+package nl.portalsinc.updater;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -36,58 +36,30 @@ import com.phonegap.hello_world.R;
 
 public class UpdateApp extends CordovaPlugin {
 	
-	/*版本号检查路径*/
+	/* Controleer het pad van het versienummer */
 	private String checkPath;
-	/* 新版本号*/
+	/* Nieuw versienummer */
 	private int newVerCode;
-	/* 新版本名称 */
+	/* Nieuwe versienaam */
 	private String newVerName;
-	/* APK 下载路径*/
+	/* APK Downloadpad */
 	private String  downloadPath;
-	/* 下载中 */
+	/* Download */
     private static final int DOWNLOAD = 1;
-    /* 下载结束 */
+    /* Einde download */
     private static final int DOWNLOAD_FINISH = 2;
-    /* 下载保存路径 */
+    /* Download wegschrijven */
     private String mSavePath;
-    /* 记录进度条数量 */
+    /* Voortgangsbalk */
     private int progress;
-    /* 是否取消更新 */
+    /* Update annuleren */
     private boolean cancelUpdate = false;
-    /* 上下文*/
+    /* Context */
     private Context mContext;
-    /* 更新进度条 */
+    /* Voortgangsbalk  */
     private ProgressBar mProgress;
     private Dialog mDownloadDialog;
-/*	
-	@Override
-    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        this.mContext = cordova.getActivity();
-		if (action.equals("checkAndUpdate")) {
-			this.checkPath = args.getString(0);
-        	checkAndUpdate();
-        }else if(action.equals("getCurrentVersion")){
-        	//优化 缩短传输内容，减少流量
-//        	JSONObject obj = new JSONObject();
-//        	obj.put("versionCode", this.getCurrentVerCode());
-//        	obj.put("versionName", this.getCurrentVerName());
-        	callbackContext.success(this.getCurrentVerCode()+"");
-        }else if(action.equals("getServerVersion")){
-        	this.checkPath = args.getString(0);
-        	if(this.getServerVerInfo()){
-        		//优化 缩短传输内容，减少流量
-//        		JSONObject obj = new JSONObject();
-//            	obj.put("serverVersionCode", newVerCode);
-//            	obj.put("serverVersionName", newVerName);
-        		callbackContext.success(newVerCode+"");
-        	}else{
-        		callbackContext.error("can't connect to the server!please check [checkpath]");
-        	}
-        	
-        }
-        return false;
-    }
-*/	
+	
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         this.mContext = cordova.getActivity();
@@ -99,23 +71,10 @@ public class UpdateApp extends CordovaPlugin {
         	return true;
 		}
 		return false;
-        /*	
-			if(this.getServerVerInfo()){
-        		//优化 缩短传输内容，减少流量
-        		JSONObject obj = new JSONObject();
-            	obj.put("serverVersionCode", newVerCode);
-            	obj.put("serverVersionName", newVerName);
-        		callbackContext.success(newVerCode+"");
-        	}else{
-        		callbackContext.error("can't connect to the server:" +this.checkPath);
-        	}
-			return true;
-        }
-		return false;
-		*/
+
     }
     /**
-     * 检查更新
+     * Controleren op udates
      */
     private void checkAndUpdate(){
     	if(getServerVerInfo()){
@@ -128,7 +87,7 @@ public class UpdateApp extends CordovaPlugin {
 	
 	
 	/**
-     * 获取应用当前版本代码
+     * Klik voor de huidige versie van de apllicatie
      * @param context
      * @return
      */
@@ -144,7 +103,7 @@ public class UpdateApp extends CordovaPlugin {
     }
     
     /**
-     * 获取应用当前版本名称
+     * Naam van de huidige applicatie
      * @param context
      * @return
      */
@@ -160,7 +119,7 @@ public class UpdateApp extends CordovaPlugin {
     }
     
     /**
-     * 获取应用名称
+     * Ophalen naam
      * @param context
      * @return
      */
@@ -169,7 +128,7 @@ public class UpdateApp extends CordovaPlugin {
     }
     
     /**
-     * 获取服务器上的版本信息
+     * Versieinformatie van de server ophalen
      * @param path
      * @return
      * @throws Exception
@@ -205,23 +164,23 @@ public class UpdateApp extends CordovaPlugin {
     }
     
     /**
-     * 显示软件更新对话框
+     * Dialoogvenster software update
      */
     private void showNoticeDialog() {
     	
-        // 构造对话框
+        // Dialoogostructuur
         AlertDialog.Builder builder = new Builder(mContext);
         builder.setTitle(R.string.soft_update_title);
         builder.setMessage(R.string.soft_update_info);
-        // 更新
+        // Update
         builder.setPositiveButton(R.string.soft_update_updatebtn, new OnClickListener(){
             public void onClick(DialogInterface dialog, int which){
                 dialog.dismiss();
-                // 显示下载对话框
+                // Dialoogvenster download tonen
                 showDownloadDialog();
             }
         });
-        // 稍后更新
+        // Nieuwere uppdates
         builder.setNegativeButton(R.string.soft_update_later, new OnClickListener(){
             public void onClick(DialogInterface dialog, int which){
                 dialog.dismiss();
@@ -232,38 +191,38 @@ public class UpdateApp extends CordovaPlugin {
     }
 
     /**
-     * 显示软件下载对话框
+     * Software download dialoog tonen
      */
     private void showDownloadDialog()
     {
-        // 构造软件下载对话框
+        // Software installeren dialoog
         AlertDialog.Builder builder = new Builder(mContext);
         builder.setTitle(R.string.soft_updating);
-        // 给下载对话框增加进度条
+        // Voortgang installatie
         final LayoutInflater inflater = LayoutInflater.from(mContext);
         View v = inflater.inflate(R.layout.softupdate_progress, null);
         mProgress = (ProgressBar) v.findViewById(R.id.update_progress);
         builder.setView(v);
-        // 取消更新
+        // Update annuleren
         builder.setNegativeButton(R.string.soft_update_cancel, new OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                // 设置取消状态
+                // Annuleren toegestaan
                 cancelUpdate = true;
             }
         });
         mDownloadDialog = builder.create();
         mDownloadDialog.show();
-        // 现在文件
+        // .apk downloaden
         downloadApk();
     }
 
     /**
-     * 下载apk文件
+     * Download .apk bestand
      */
     private void downloadApk()
     {
-        // 启动新线程下载软件
+        // Start nieuwe download
         new downloadApkThread().start();
     }
 
@@ -273,13 +232,13 @@ public class UpdateApp extends CordovaPlugin {
         {
             switch (msg.what)
             {
-            // 正在下载
+            // Download
             case DOWNLOAD:
-                // 设置进度条位置
+                // Voortgangsbalk
                 mProgress.setProgress(progress);
                 break;
             case DOWNLOAD_FINISH:
-                // 安装文件
+                // Te installeren bestand
                 installApk();
                 break;
             default:
@@ -289,52 +248,52 @@ public class UpdateApp extends CordovaPlugin {
     };
     
     /**
-     * 下载文件线程
+     * Download thread
      */
 	private class downloadApkThread extends Thread {
 		@Override
 		public void run() {
 			try {
-				// 判断SD卡是否存在，并且是否具有读写权限
+				// Bepalen of er een SD/kaart is, met de lees- en schrijfrechten
 				if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-					// 获得存储卡的路径
+					// Pad naar de geheugenkaart
 					String sdpath = Environment.getExternalStorageDirectory()+ "/";
 					mSavePath = sdpath + "download";
 					URL url = new URL(downloadPath);
-					// 创建连接
+					// Verbinding maken
 					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 					conn.connect();
-					// 获取文件大小
+					// Get file size
 					int length = conn.getContentLength();
-					// 创建输入流
+					// Inputstream
 					InputStream is = conn.getInputStream();
 
 					File file = new File(mSavePath);
-					// 判断文件目录是否存在
+					// Check file directory
 					if (!file.exists()) {
 						file.mkdir();
 					}
 					File apkFile = new File(mSavePath, newVerName);
 					FileOutputStream fos = new FileOutputStream(apkFile);
 					int count = 0;
-					// 缓存
+					// Cache
 					byte buf[] = new byte[1024];
-					// 写入到文件中
+					// Naar bestand schrijven
 					do {
 						int numread = is.read(buf);
 						count += numread;
-						// 计算进度条位置
+						// Voortgangsbalk
 						progress = (int) (((float) count / length) * 100);
-						// 更新进度
+						// Voortgang bijwerken
 						mHandler.sendEmptyMessage(DOWNLOAD);
 						if (numread <= 0) {
-							// 下载完成
+							// Download voltooid
 							mHandler.sendEmptyMessage(DOWNLOAD_FINISH);
 							break;
 						}
-						// 写入文件
+						// Schrijf naar bestand
 						fos.write(buf, 0, numread);
-					} while (!cancelUpdate);// 点击取消就停止下载.
+					} while (!cancelUpdate);// Klik op annuleren om te stoppen met downloaden.
 					fos.close();
 					is.close();
 				}
@@ -343,20 +302,20 @@ public class UpdateApp extends CordovaPlugin {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			// 取消下载对话框显示
+			// Downloadvenster wegdrukken
 			mDownloadDialog.dismiss();
 		}
 	};
 
 	/**
-	 * 安装APK文件
+	 * Installler .apk bestand
 	 */
 	private void installApk() {
 		File apkfile = new File(mSavePath, newVerName);
 		if (!apkfile.exists()) {
 			return;
 		}
-		// 通过Intent安装APK文件
+		// Installer .apk bestanden via webintent
 		Intent i = new Intent(Intent.ACTION_VIEW);
 		i.setDataAndType(Uri.parse("file://" + apkfile.toString()),
 				"application/vnd.android.package-archive");

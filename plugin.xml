@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
  
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
-           id="com.zybx.xiaofu"
+           id="nl.portalsinc.plugins.updater"
       version="0.1.0">
     <name>apkUpdate</name>
-    <description>Sample PhoneGap Apk Update Plugin</description>
+    <description>PhoneGap Apk Update Plugin</description>
     <license>MIT</license>
     <keywords>phonegap,android,autoupdate</keywords>
  
