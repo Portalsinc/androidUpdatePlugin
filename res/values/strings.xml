@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Monteurs</string>
+    <string name="app_name">HelloWorld</string>
     <string name="soft_update_title">App update</string>
 	<string name="soft_update_info">Een nieuwe versie van de app staat gereed.</string>
 	<string name="soft_update_updatebtn">Update</string>
