@@ -1,1 +1,1 @@
-{ "verCode":"3","verName":"3.0.1","apkPath":"http://www.luancheng.us/apps/zybx.apk" }
+{ "verCode":"1","verName":"1.0.1","apkPath":"http://www.xxx.com/apps/app.apk" }
